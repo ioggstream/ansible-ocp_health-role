@@ -12,7 +12,7 @@
     cluster-health
 
 - name: Check nodes
-  delegate_to: all[0]
+  run_once: yes
   shell: |
     oc get nodes
 
