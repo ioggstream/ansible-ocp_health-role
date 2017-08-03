@@ -26,4 +26,4 @@
 
 - name: Registry is up
   fail: msg="Registry is not up"
-  when: "oc_get_pods_default_health.stdout.find('docker-registry') != -1"
+  when: "oc_get_pods_default_health.stdout.find('docker-registry') == -1"
