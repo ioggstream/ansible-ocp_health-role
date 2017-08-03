@@ -1,3 +1,29 @@
----
-# tasks file for ocp_health
+#
+# Various openshift checks
+#
 - include: etcd.yml
+
+- include: rhn.yml
+
+- name: Check master url
+  uri:
+    url: "https://{{ansible_fqdn}}:8443"
+    return_content: yes
+  register: master_url
+  failed_when:  "'swagger' not in master_url.content"
+
+- name: All nodes are Ready
+  run_once: yes
+  shell: |
+    oc get nodes -o wide
+  register: get_nodes
+  failed_when: "get_nodes.stdout.find('Not Ready') != -1"
+
+- shell: |
+      oc get pods -n default | grep Running
+  register: oc_get_pods_default_health
+  check_mode: false
+
+- name: Registry is up
+  fail: msg="Registry is not up"
+  when: "oc_get_pods_default_health.stdout.find('docker-registry') != -1"

@@ -1,0 +1,8 @@
+- name: Subscription Manager is ok
+  shell: >
+    subscription-manager status
+  register: subscription_manager_status
+  check_mode: no
+
+- fail: msg="Subscription manager not current"
+  when: "'Overall Status: Current' not in subscription_manager_status.stdout"

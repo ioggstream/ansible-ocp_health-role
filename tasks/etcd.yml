@@ -1,6 +1,7 @@
 - name: Check etcd process
   shell: |
     pgrep -fa etcd
+  check_mode: no
 
 - name: Check etcd health
   shell: |
@@ -10,9 +11,7 @@
       --ca-file=/etc/etcd/ca.crt \
       --peers="$ETCD_ADVERTISE_CLIENT_URLS" \
     cluster-health
-
-- name: Check nodes
-  run_once: yes
-  shell: |
-    oc get nodes
+  check_mode: no
+  register: etcd_cluster_health
+  failed_when: "'cluster is healthy' not in etcd_cluster_health.stdout"
 
