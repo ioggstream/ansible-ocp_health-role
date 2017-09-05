@@ -33,9 +33,9 @@
   delay: 5
   until: result.rc == 0
 
-- name: Create django-pgsql
+- name: Create django-psql-persistent
   run_once: true
-  when: oc_get_pods_health.stdout.find('django-postgresql') == -1
+  when: oc_get_pods_health.stdout.find('django-psql-persistent') == -1
   register: result
   shell: |
     oc project ocp-health &&
