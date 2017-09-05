@@ -7,9 +7,18 @@
   run_once: true
   changed_when: no
 
+- name: Get projects
+  shell: |
+    oc projects
+  register: oc_projects
+  check_mode: false
+  run_once: true
+  changed_when: no
+
 - name: Create canary project ocp-health
   run_once: true
-  when: oc_get_pods_health.rc != 0
+  when: >
+    'ocp-health' not in oc_projects.stdout
   shell: |
     oc new-project ocp-health
 
