@@ -16,13 +16,21 @@
 - name: Create mysql ephemeral
   run_once: true
   when: oc_get_pods_health.stdout.find('cakephp-mysql') == -1
+  register: result
   shell: |
     oc project ocp-health &&
     oc new-app -f /usr/share/openshift/examples/quickstart-templates/cakephp-mysql.json
+  retries: 3
+  delay: 5
+  until: result.rc == 0
 
 - name: Create django-pgsql
   run_once: true
   when: oc_get_pods_health.stdout.find('django-postgresql') == -1
+  register: result
   shell: |
     oc project ocp-health &&
     oc new-app -f /usr/share/openshift/examples/quickstart-templates/django-postgresql-persistent.json
+  retries: 3
+  delay: 5
+  until: result.rc == 0
