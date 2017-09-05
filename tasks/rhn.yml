@@ -2,7 +2,6 @@
   shell: >
     subscription-manager status
   register: subscription_manager_status
+  failed_when: "'Overall Status: Current' not in subscription_manager_status.stdout"
   check_mode: no
-
-- fail: msg="Subscription manager not current"
-  when: "'Overall Status: Current' not in subscription_manager_status.stdout"
+  changed_when: false

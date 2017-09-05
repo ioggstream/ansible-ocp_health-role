@@ -1,0 +1,45 @@
+
+- name: Get pods from the canary project ocp-health
+  shell: |
+    oc get pods -n ocp-health
+  register: oc_get_pods_health
+  check_mode: false
+  run_once: true
+  changed_when: no
+
+- name: Get projects
+  shell: |
+    oc projects
+  register: oc_projects
+  check_mode: false
+  run_once: true
+  changed_when: no
+
+- name: Create canary project ocp-health
+  run_once: true
+  when: >
+    'ocp-health' not in oc_projects.stdout
+  shell: |
+    oc new-project ocp-health
+
+- name: Create mysql ephemeral
+  run_once: true
+  when: oc_get_pods_health.stdout.find('cakephp-mysql') == -1
+  register: result
+  shell: |
+    oc project ocp-health &&
+    oc new-app -f /usr/share/openshift/examples/quickstart-templates/cakephp-mysql.json
+  retries: 3
+  delay: 5
+  until: result.rc == 0
+
+- name: Create django-psql-persistent
+  run_once: true
+  when: oc_get_pods_health.stdout.find('django-psql-persistent') == -1
+  register: result
+  shell: |
+    oc project ocp-health &&
+    oc new-app -f /usr/share/openshift/examples/quickstart-templates/django-postgresql-persistent.json
+  retries: 3
+  delay: 5
+  until: result.rc == 0
