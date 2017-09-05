@@ -2,6 +2,7 @@
   shell: |
     pgrep -fa etcd
   check_mode: no
+  changed_when: false
 
 - name: Check etcd health
   shell: |
@@ -14,4 +15,4 @@
   check_mode: no
   register: etcd_cluster_health
   failed_when: "'cluster is healthy' not in etcd_cluster_health.stdout"
-
+  changed_when: etcd_cluster_health.rc != 0

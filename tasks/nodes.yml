@@ -1,0 +1,9 @@
+---
+- name: Check openshift version
+  shell:
+    openshift version
+  register: ocp_version_output
+  failed_when: "ocp_version not in ocp_version_output.stdout"
+  check_mode: false
+  changed_when: false
+
