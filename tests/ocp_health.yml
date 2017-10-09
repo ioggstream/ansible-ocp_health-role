@@ -1,0 +1,6 @@
+---
+# ocp nodes includes masters and infra.
+- hosts: nodes
+  roles:
+  - role: ioggstream.ocp_health
+    create_test_project: no
