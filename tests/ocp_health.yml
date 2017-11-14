@@ -1,6 +1,9 @@
 ---
 # ocp nodes includes masters and infra.
+# LANG: C is required for string comparison in subscription manager.
 - hosts: nodes
+  environment:
+    LANG: C
   roles:
   - role: ioggstream.ocp_health
     create_test_project: no
