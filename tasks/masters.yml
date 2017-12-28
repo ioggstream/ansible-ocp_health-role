@@ -1,6 +1,15 @@
 #
 # Various openshift checks
 #
+- name: Master services are enabled
+  check_mode: no
+  changed_when: false
+  command: |
+    systemctl is-enabled {{item}}
+  with_items:
+  - atomic-openshift-master-controllers
+  - atomic-openshift-master-api
+
 - name: Check master url.
   uri:
     url: "https://{{ansible_fqdn}}:8443"
