@@ -15,7 +15,7 @@
     oc get nodes -o wide
   register: get_nodes
   check_mode: false
-  failed_when: "get_nodes.stdout.find('Not Ready') != -1 or get_nodes.rc != 0"
+  failed_when: "get_nodes.stdout.find('NotReady') != -1 or get_nodes.rc != 0"
   changed_when: false
 
 - name: Get pods from the default project.
