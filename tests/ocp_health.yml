@@ -4,3 +4,5 @@
   roles:
   - role: ioggstream.ocp_health
     create_test_project: no
+    ocp_version: ""
+    validate_certs: true

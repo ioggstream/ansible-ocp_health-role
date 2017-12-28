@@ -28,6 +28,13 @@ ocp_version: "3.4.1.44.11"
 create_test_project: false
 ```
 
+- validate_certs: Validate certs when testing api urls. Default is "true". 
+
+```
+validate_certs: true
+```
+
+
 Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Dependencies
@@ -44,6 +51,7 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
          - role: ioggstream.ocp_health
            create_test_project: false
+           validate_certs: false
 
 
 You'll find this sample playbook under `tests/ocp_health.yml`

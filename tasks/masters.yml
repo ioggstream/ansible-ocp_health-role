@@ -1,19 +1,21 @@
 #
 # Various openshift checks
 #
-- name: Check master url
+- name: Check master url.
   uri:
     url: "https://{{ansible_fqdn}}:8443"
     return_content: yes
+    validate_certs: "{{validate_certs}}"
   register: master_url
   failed_when:  "'swagger' not in master_url.content"
 
-- name: All nodes are Ready
+- name: All nodes are Ready.
   run_once: yes
   shell: |
     oc get nodes -o wide
   register: get_nodes
-  failed_when: "get_nodes.stdout.find('Not Ready') != -1"
+  check_mode: false
+  failed_when: "get_nodes.stdout.find('Not Ready') != -1 or get_nodes.rc != 0"
   changed_when: false
 
 - name: Get pods from the default project.

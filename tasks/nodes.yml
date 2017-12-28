@@ -1,9 +1,20 @@
 ---
-- name: Check openshift version
+- name: Check openshift version.
   shell:
     openshift version
   register: ocp_version_output
-  failed_when: "ocp_version not in ocp_version_output.stdout"
+  failed_when: "(ocp_version | string ) not in ocp_version_output.stdout"
   check_mode: false
   changed_when: false
+
+- name: Check resolv.conf uses dnsmasq on 3.6+.
+  changed_when: false
+  check_mode: false
+  when:
+  - >-
+    ocp_version | version_compare('3.6', '>=')
+  - >-
+    'masters' not in group_names
+  shell: |
+    grep cluster.local /etc/resolv.conf
 

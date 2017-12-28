@@ -2,3 +2,4 @@
 # defaults file for ocp_health
 ocp_version: ""
 create_test_project: false
+validate_certs: true
